@@ -48,7 +48,10 @@
         <h5 style="text-align: center">LIST RESULTS</h5>
         <hr>
         <table id="res-list" style="margin: 0 auto;">
-
+            <tr>
+                <td>Code</td>
+                <td>Timestamp</td>
+            </tr>
         </table>
         <hr>
         <button onclick="exportTableToExcel()" id="exportBtn">Export</button>
@@ -68,9 +71,18 @@
 
         const addToResults = () => {
             let barcodes = document.querySelector('#barcodes').innerText;
+            let today = new Date();
+            let dateTime = today.getDate()+'/'+(today.getMonth()+1)+'/'+today.getFullYear() +' '+ today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
             const node = document.createElement("tr");
-            node.appendChild(document.createTextNode(barcodes));
+            const nodeChild1 = document.createElement("td");
+            nodeChild1.appendChild(document.createTextNode(barcodes));
+            node.appendChild(nodeChild1);
+
+            const nodeChild2 = document.createElement("td");
+            nodeChild2.appendChild(document.createTextNode(dateTime));
+            node.appendChild(nodeChild2);
             let resList = document.querySelector('#res-list').appendChild(node);
+
         }
 
         function step(capturer) {
