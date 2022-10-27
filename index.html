@@ -10,7 +10,13 @@
 </head>
 
 <body>
+    <div class="fixed-nav">
+        <p>IP:
+        <span id="gfg"></span></p>
+    </div>
     <div class="container" style="text-align: center">
+
+        
         <canvas id="canvas" width="360" height="200" style="border: 1px solid #333;"></canvas>
 
         <div class="content">
@@ -18,11 +24,12 @@
             <button onclick="addToResults()">INSERT</button>
         </div>
         <h4 style="text-align: center">LIST RESULTS</h4>
-        
+
         <table class="placeholder-table" style="margin: 0 auto; text-align: center;">
             <tr>
-                <td style="width: 50%;"><b>Timestamp</b></td>
-                <td style="width: 50%;"><b>Code</b></td>
+                <td style="width: 33%;"><b>Timestamp</b></td>
+                <td style="width: 33%;"><b>Code</b></td>
+                <td style="width: 33%;"><b>User IP</b></td>
             </tr>
         </table>
         <hr>
@@ -34,12 +41,26 @@
                 </tr>
             </table>
         </div>
-        
+
         <hr>
         <button onclick="download_table_as_csv('res-list')" id="exportBtn">Download As CSV</button>
     </div>
 
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"> </script>
+    <script>
 
+        /* Add "https://api.ipify.org?format=json" statement
+                   this will communicate with the ipify servers in
+                   order to retrieve the IP address $.getJSON will
+                   load JSON-encoded data from the server using a
+                   GET HTTP request */
+
+        $.getJSON("https://api.ipify.org?format=json", function (data) {
+
+            // Setting text of element P with id gfg
+            $("#gfg").html(data.ip);
+        })
+    </script>
     <script src="./assets/main.js"></script>
 </body>
 

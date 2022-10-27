@@ -26,6 +26,11 @@ const addToResults = () => {
         const nodeChild2 = document.createElement("td");
         nodeChild2.appendChild(document.createTextNode(barcodes));
         node.appendChild(nodeChild2);
+
+        const nodeChild3 = document.createElement("td");
+        nodeChild3.appendChild(document.createTextNode(document.querySelector('#gfg').innerText));
+        node.appendChild(nodeChild3);
+
         let resList = document.querySelector('#res-list').appendChild(node);
     }
 

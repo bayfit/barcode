@@ -1,6 +1,6 @@
 .container {
     position: absolute;
-    top: 50%;
+    top: 55%;
     left: 50%;
     transform: translate(-50%, -50%);
 }
@@ -12,6 +12,14 @@
     margin-bottom: 5px;
 }
 
+.fixed-nav {
+    color: white;
+    position: fixed;
+    bottom: 5px;
+    right: 5px;
+    background: orangered;
+    padding: 1px 8px;
+}
 
 #canvas {
     border-radius: 10px;
