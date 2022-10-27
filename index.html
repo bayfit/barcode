@@ -5,36 +5,8 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Barcode Reader</title>
-    <style>
-        .container {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-        }
-
-        #canvas {
-            border-radius: 10px;
-        }
-
-        .content {
-            text-align: center;
-        }
-
-        .content button, #exportBtn {
-            padding: 7px 15px;
-            border: 1px solid #ddd;
-            border-radius: 15px;
-            background: orangered;
-            color: white;
-            cursor: pointer;
-        }
-
-        #res-list * {
-            padding: 5px !important
-        }
-    </style>
+    <title>Check in App</title>
+    <link rel="stylesheet" href="./assets/main.css">
 </head>
 
 <body>
@@ -42,114 +14,33 @@
         <canvas id="canvas" width="360" height="200" style="border: 1px solid #333;"></canvas>
 
         <div class="content">
-            <div id="barcodes">1</div>
+            <div id="barcodes"></div>
             <button onclick="addToResults()">INSERT</button>
         </div>
-        <h5 style="text-align: center">LIST RESULTS</h5>
-        <hr>
-        <table id="res-list" style="margin: 0 auto;">
+        <h4 style="text-align: center">LIST RESULTS</h4>
+        
+        <table class="placeholder-table" style="margin: 0 auto; text-align: center;">
             <tr>
-                <td>Code</td>
-                <td>Timestamp</td>
+                <td style="width: 50%;"><b>Timestamp</b></td>
+                <td style="width: 50%;"><b>Code</b></td>
             </tr>
         </table>
         <hr>
-        <button onclick="exportTableToExcel()" id="exportBtn">Export</button>
+        <div class="data-exported">
+            <table id="res-list" style="margin: 0 auto;">
+                <tr style="display: none;">
+                    <td><b>Timestamp</b></td>
+                    <td><b>Code</b></td>
+                </tr>
+            </table>
+        </div>
+        
+        <hr>
+        <button onclick="download_table_as_csv('res-list')" id="exportBtn">Download As CSV</button>
     </div>
 
 
-    <script>
-        navigator.mediaDevices.enumerateDevices().then((devices) => {
-            let id = devices.filter((device) => device.kind === "videoinput").slice(-1).pop().deviceId;
-            let constrains = { video: { optional: [{ sourceId: id }] } };
-
-            navigator.mediaDevices.getUserMedia(constrains).then((stream) => {
-                let capturer = new ImageCapture(stream.getVideoTracks()[0]);
-                step(capturer);
-            });
-        });
-
-        const addToResults = () => {
-            let barcodes = document.querySelector('#barcodes').innerText;
-            let today = new Date();
-            let dateTime = today.getDate()+'/'+(today.getMonth()+1)+'/'+today.getFullYear() +' '+ today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
-            const node = document.createElement("tr");
-            const nodeChild1 = document.createElement("td");
-            nodeChild1.appendChild(document.createTextNode(barcodes));
-            node.appendChild(nodeChild1);
-
-            const nodeChild2 = document.createElement("td");
-            nodeChild2.appendChild(document.createTextNode(dateTime));
-            node.appendChild(nodeChild2);
-            let resList = document.querySelector('#res-list').appendChild(node);
-
-        }
-
-        function step(capturer) {
-            capturer.grabFrame().then((image) => {
-                let canvas = document.getElementById("canvas");
-                let ctx = canvas.getContext("2d");
-                ctx.drawImage(image, 0, 0, image.width, image.height, 0, 0, canvas.width, canvas.height);
-                const barcodeDetector = new BarcodeDetector({
-                    formats: [
-                        'aztec',
-                        'code_128',
-                        'code_39',
-                        'code_93',
-                        'codabar',
-                        'data_matrix',
-                        'ean_13',
-                        'ean_8',
-                        'itf',
-                        'pdf417',
-                        'qr_code',
-                        'upc_a',
-                        'upc_e',
-                    ],
-                });
-
-                barcodeDetector.detect(image)
-                    .then(barcodes => {
-                        document.getElementById("barcodes").innerHTML = barcodes.map(barcode => barcode.rawValue).join(', ');
-                        step(capturer);
-                    })
-                    .catch((e) => {
-                        console.error(e);
-                    }); 000
-            });
-        }
-        function exportTableToExcel() {
-            var downloadLink;
-            var dataType = 'application/vnd.ms-excel';
-            var tableSelect = document.getElementById('res-list');
-            var tableHTML = tableSelect.outerHTML.replace(/ /g, '%20');
-
-            // Specify file name
-            var filename = '';
-            filename = filename ? filename + '.xls' : 'excel_data.xls';
-
-            // Create download link element
-            downloadLink = document.createElement("a");
-
-            document.body.appendChild(downloadLink);
-
-            if (navigator.msSaveOrOpenBlob) {
-                var blob = new Blob(['\ufeff', tableHTML], {
-                    type: dataType
-                });
-                navigator.msSaveOrOpenBlob(blob, filename);
-            } else {
-                // Create a link to the file
-                downloadLink.href = 'data:' + dataType + ', ' + tableHTML;
-
-                // Setting the file name
-                downloadLink.download = filename;
-
-                //triggering the function
-                downloadLink.click();
-            }
-        }
-    </script>
+    <script src="./assets/main.js"></script>
 </body>
 
 </html>
